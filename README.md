@@ -33,6 +33,9 @@ Passwords: **Change all passwords to something other than the default passwords!
 ```
 docker-compose build
 docker-compose up -d
+```
+After you finish your installation run:
+```
 docker exec -it torfiedsmf_apache_1 rm /var/www/html/install.php
 ```
 you can now start running your app!
