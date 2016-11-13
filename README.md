@@ -53,6 +53,6 @@ $ docker exec -ti torfiedsmf_tor_1 onions
 
 #### What works and what doesn't
 
-Email confirmation and captcha don't work yet. I'll need to attach and forth container with a MTS like sendmail to provide mail access and add in the php requirements needed to captcha.  It's a work in progress.
+Email confirmation and captcha don't work yet. I'll need to attach a forth Docker image with a MTS like sendmail to provide mail access and add in the php requirements needed to captcha.  It's a work in progress.
 
 Everything else works as far as I can see.
