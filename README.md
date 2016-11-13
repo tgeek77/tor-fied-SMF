@@ -1,7 +1,7 @@
 # tor-fied-lamp
 ## Intro
 
-These are docker-compose and dockerfile scripts for creating a simple vanilla lamp stack runing as a hidden service onion.
+These are docker-compose and dockerfile scripts for creating a basic installation of [Simple Machines Forum](http://www.simplemachines.org/) 2.1 Beta 2 as a hidden service onion.
 
 #### Special thanks to [cmehay](https://github.com/cmehay/docker-tor-hidden-service) for their projects which allowed me to build this one.
 
@@ -20,11 +20,11 @@ docker-compose.yml calls on three images:
   <dd>apache is my own image that is build by the attached dockerfile.</dd>
 </dl>
 
-Dockerfile uses ubuntu:latest and installs a list of packages including apache2, php, and some standard dependancies. The list of packages can be changed or added to as needed for your own personal needs.
+Dockerfile uses ubuntu:14.04 and installs a list of packages including apache2, php, and some standard dependancies. The list of packages can be changed or added to as needed for your own personal needs.
 
 #### Variables
 
-Volumes: In the tor section, docker-compose will create a ~/.keys directory with the hostname and private key.  In the apache section, it create ~/www which links to /var/www/html in the apache container. By default you will not be able to write to this directory. Use chmod to change permissions to something that you can use. You can change this local directory to whatever you want.
+Volumes: In the tor section, docker-compose will create a ~/.keys directory with the hostname and private key.
 
 Passwords: **Change all passwords to something other than the default passwords!** I included a basic starter database in the configuration to ease in setting up something like wordpress or whatever.
 
@@ -33,6 +33,7 @@ Passwords: **Change all passwords to something other than the default passwords!
 ```
 docker-compose build
 docker-compose up -d
+docker exec -it torfiedsmf_apache_1 rm /var/www/html/install.php
 ```
 you can now start running your app!
 
@@ -44,28 +45,14 @@ docker-compose down
 
 #### What's my .onion url?
 
-Your new .onion hostname will be in ~/.keys/wordpress/hostname or you can run the following command:
+Your new .onion hostname will be in ~/.keys/apache/hostname or you can run the following command:
 
 ```
-$ docker exec -ti torfiedlamp_tor_1 onions
+$ docker exec -ti torfiedsmf_tor_1 onions
 ```
 
-#### Setting up LAMP applications
+#### What works and what doesn't
 
-I have successfully install Joomla, Wordpress, Koken, and phpMyAdmin using this project.
+Email confirmation and captcha don't work yet. I'll need to attach and forth container with a MTS like sendmail to provide mail access and add in the php requirements needed to captcha.  It's a work in progress.
 
-Joomla, Wordpress, etc. -- the database location should not be "localhost", instead it should be "db" as that is how you can connect to the remote database container.
-
-phpMyAdmin -- download and install the file from https://www.phpmyadmin.net/. Rename config.sample.inc.php to config.inc.php and make the following change:
-
-```
-$cfg['Servers'][$i]['host'] = 'localhost';
-```
-
-Should be changed to:
-
-```
-$cfg['Servers'][$i]['host'] = 'db';
-```
-
-You can then run phpMyAdmin using the mariadb root and password settings from docker-compose.yml
+Everything else works as far as I can see.
